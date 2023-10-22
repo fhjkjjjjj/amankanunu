@@ -6,7 +6,7 @@
 #include <string>
 #include <EGL/egl.h>
 #include <GLES3/gl3.h>
-#include "Includes/Logger.h"
+#include <GLES2/gl2.h>
 #include "Includes/obfuscate.h"
 #include "Includes/Chams.h"
 #include "hack.h"
@@ -79,8 +79,12 @@ void hack_start(const char *_game_data_dir) {
     do {
         sleep(1);
         g_TargetModule = utils::find_module(TargetLibName);
-    } while (g_TargetModule.size <= 0);
+    } while (g_TargetModule.size <= 0 && mlovinit());
     LOGI("%s: %p - %p",TargetLibName, g_TargetModule.start_address, g_TargetModule.end_address);
+    setShader("_SpecColor");
+    LogShaders();
+    Wallhack(); 
+    SetWallhackS(true);
 
     // TODO: hooking/patching here
     
