@@ -48,6 +48,11 @@ option(BUILD_EXAMPLE "Build example" OFF)
 option(BUILD_TEST "Build test" OFF)
 
 set(IMGUI_SRC
+    Substrate/hde64.c
+	Substrate/SubstrateDebug.cpp
+	Substrate/SubstrateHook.cpp
+	Substrate/SubstratePosixMemory.cpp
+	Substrate/SymbolFinder.cpp
     imgui/imgui.cpp
     imgui/imgui_demo.cpp
     imgui/imgui_draw.cpp
