@@ -17,7 +17,13 @@
 #include "imgui_impl_android.h"
 #include "imgui_impl_opengl3.h"
 #include "MemoryPatch.h"
-
+bool DefaultChams;
+bool ShadingChams;
+bool WireframeChams;
+bool RainbowChams;
+bool OutlineChams;
+bool GlowChams;
+bool ACTIVEALL;
 static int                  g_GlHeight, g_GlWidth;
 static bool                 g_IsSetup = false;
 static std::string          g_IniFileName = "";
@@ -65,11 +71,88 @@ EGLBoolean hook_eglSwapBuffers(EGLDisplay dpy, EGLSurface surface) {
     ImGui::NewFrame();
 
     ImGui::Text("aman");
-
+    ImGui::Checkbox("Default Chams",&DefaultChams);
+	//	 ImGui::SameLine();
+		 ImGui::Text("");
+	//	 ImGui::SameLine();
+		 ImGui::Checkbox("Shading Chams",&ShadingChams);
+	//	 ImGui::SameLine();
+		 ImGui::Text("");
+    //ImGui::SameLine();
+		 ImGui::Checkbox("Wireframe Chams",&WireframeChams);
+		 ImGui::Text("");
+		 ImGui::Text("");
+	//	 ImGui::SameLine();
+		 ImGui::Checkbox("Glow Chams    ",&GlowChams);
+	//	 ImGui::SameLine();
+		 ImGui::Text("");
+	//	 ImGui::SameLine();
+		 ImGui::Checkbox("Outline Chams ",&OutlineChams);
+	//	 ImGui::SameLine();
+		 ImGui::Text("");
+	//	 ImGui::SameLine();
+		 ImGui::Checkbox("Rainbow Chams",&RainbowChams);
+		 ImGui::Text("");
+		 
     ImGui::EndFrame();
     ImGui::Render();
     glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+       if (DefaultChams){
+		//	GLint (*old_glGetUniformLocation)(GLuint program, const GLchar *name);
+		SetWallhack(true);
+	}else{
+		if (ACTIVEALL){
+		SetWallhack(true);
+		} else{
+			SetWallhack(false);
+		}
+	}
+	if (ShadingChams){
+		SetWallhackS(true);
+	}else{
+		if (ACTIVEALL){
+		SetWallhackS(true);
+		} else{
+			SetWallhackS(false);
+		}
+	}
+	if (WireframeChams){
+		SetWallhackW(true);  
+	}else{ 
+		if (ACTIVEALL){
+		SetWallhackW(true);  
+		} else{
+			SetWallhackW(false);  
+		} 
+	}
+	if (GlowChams){
+		SetWallhackG(true);
+	}else{
+		if (ACTIVEALL){
+		SetWallhackG(true);
+		} else{
+			SetWallhackG(false);  
+		} 
+	}
+	if (OutlineChams){
+		SetWallhackO(true); 
+	}else{
+		if (ACTIVEALL){
+		SetWallhackO(true); 
+		} else{
+			SetWallhackO(false); 
+		} 
+	}
+	if (RainbowChams){
+		SetRainbow(true);
+	}else{
+		if (ACTIVEALL){
+		SetRainbow(true);
+		} else{
+			SetRainbow(false);
+		} 
+	}
     return old_eglSwapBuffers(dpy, surface);
 }
 
@@ -107,6 +190,6 @@ void hack_prepare(const char *_game_data_dir) {
         utils::hook((void*)eglSwapBuffers, (func_t)hook_eglSwapBuffers, (func_t*)&old_eglSwapBuffers);
     }
     xdl_close(egl_handle);
-
+    mlovinit();
     hack_start(_game_data_dir);
 }
