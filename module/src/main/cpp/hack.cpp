@@ -7,7 +7,6 @@
 #include <EGL/egl.h>
 #include <GLES3/gl3.h>
 #include <GLES2/gl2.h>
-#include "Includes/obfuscate.h"
 #include "Includes/Chams.h"
 #include "hack.h"
 #include "log.h"
