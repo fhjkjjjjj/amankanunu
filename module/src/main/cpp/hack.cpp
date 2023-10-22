@@ -6,7 +6,9 @@
 #include <string>
 #include <EGL/egl.h>
 #include <GLES3/gl3.h>
-
+#include "Includes/Logger.h"
+#include "Includes/obfuscate.h"
+#include "Includes/Chams.h"
 #include "hack.h"
 #include "log.h"
 #include "game.h"
