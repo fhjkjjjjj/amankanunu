@@ -74,7 +74,7 @@ EGLBoolean hook_eglSwapBuffers(EGLDisplay dpy, EGLSurface surface) {
 }
 
 void hack_start(const char *_game_data_dir) {
-    LOGI("hack start | %s", _game_data_dir);
+//    LOGI("hack start | %s", _game_data_dir);
     do {
         sleep(1);
         g_TargetModule = utils::find_module(TargetLibName);
@@ -90,9 +90,9 @@ void hack_start(const char *_game_data_dir) {
 }
 
 void hack_prepare(const char *_game_data_dir) {
-    LOGI("hack thread: %d", gettid());
+//    LOGI("hack thread: %d", gettid());
     int api_level = utils::get_android_api_level();
-    LOGI("api level: %d", api_level);
+//    LOGI("api level: %d", api_level);
     g_IniFileName = std::string(_game_data_dir) + "/files/imgui.ini";
     sleep(5);
 
