@@ -64,7 +64,32 @@ EGLBoolean hook_eglSwapBuffers(EGLDisplay dpy, EGLSurface surface) {
     ImGui_ImplAndroid_NewFrame(g_GlWidth, g_GlHeight);
     ImGui::NewFrame();
 
-    ImGui::ShowDemoWindow();
+    style.FrameRounding = 17.0f;
+	 ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(20,20)); // Increase the button height
+     static int tab = 0;
+	 ImGui::SameLine();
+	 if (ImGui::Button("CHAMS MENU")){
+		 tab = 0;
+	 }
+	 ImGui::SameLine();
+	 if (ImGui::Button("HACKS MENU")){
+		 tab = 1;
+	 }
+	 ImGui::SameLine();
+	 if (ImGui::Button("MENU STYLE")){
+		 tab = 2;
+		 }
+	 ImGui::SameLine();
+	 if (ImGui::Button("ABOUT ME")){
+		 tab = 3;
+		/*
+		
+	ImVec2 startPos(50, 50);  // Starting point of the line
+    ImVec2 endPos(200, 50);   // Ending point of the line
+    ImU32 color = IM_COL32(255, 0, 0, 255);  // Color of the line (red in this example)
+    float thickness = 2.0f;  // Thickness of the line
+	// ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10,10));*/
+    }
 
     ImGui::EndFrame();
     ImGui::Render();
