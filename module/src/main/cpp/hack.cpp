@@ -9,7 +9,6 @@
 #include <GLES2/gl2.h>
 #include "Includes/obfuscate.h"
 #include "Includes/Chams.h"
-#include "Includes/Logger.h"
 #include "Includes/Utils.h"
 #include "hack.h"
 #include "log.h"
