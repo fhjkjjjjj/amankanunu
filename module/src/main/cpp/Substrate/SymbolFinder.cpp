@@ -213,11 +213,11 @@ static symtab_t load_symtab(char *filename) {
 
     fd = open(filename, O_RDONLY);
     if (0 > fd) {
-        LOGE(("%s open\n"), __func__);
+        //LOGE(("%s open\n"), __func__);
         return NULL;
     }
     if (0 > do_load(fd, symtab)) {
-        LOGE(("Error ELF parsing %s\n"), filename);
+        //LOGE(("Error ELF parsing %s\n"), filename);
         free(symtab);
         symtab = NULL;
     }
@@ -239,7 +239,7 @@ static int load_memmap(pid_t pid, struct mm *mm, int *nmmp) {
     sprintf(p_buf, ("/proc/%d/maps"), pid);
     fd = open(p_buf, O_RDONLY);
     if (0 > fd) {
-        LOGE(("Can't open %s for reading\n"), p_buf);
+        //LOGE(("Can't open %s for reading\n"), p_buf);
         free(p_buf);
         return -1;
     }
@@ -251,7 +251,7 @@ static int load_memmap(pid_t pid, struct mm *mm, int *nmmp) {
     while (1) {
         rv = read(fd, p, buf_size - (p - p_buf));
         if (0 > rv) {
-            LOGE(("%s read"), __FUNCTION__);
+            //LOGE(("%s read"), __FUNCTION__);
             free(p_buf);
             return -1;
         }
@@ -259,7 +259,7 @@ static int load_memmap(pid_t pid, struct mm *mm, int *nmmp) {
             break;
         p += rv;
         if (p - p_buf >= buf_size) {
-            LOGE(("Too many memory mapping\n"));
+            //LOGE(("Too many memory mapping\n"));
             free(p_buf);
             return -1;
         }
