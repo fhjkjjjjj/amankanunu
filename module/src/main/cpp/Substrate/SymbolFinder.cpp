@@ -10,7 +10,7 @@
 #include "SymbolFinder.h"
 
 #define TAG "MSHook"
-#define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG,  TAG, __VA_ARGS__)
+#define //LOGD(...) __android_log_print(ANDROID_LOG_DEBUG,  TAG, __VA_ARGS__)
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR, TAG, __VA_ARGS__)
 /* memory map for libraries */
 #define MAX_NAME_LEN 256
@@ -105,19 +105,19 @@ static int do_load(int fd, symtab_t symtab) {
     /* elf header */
     rv = read(fd, &ehdr, sizeof(ehdr));
     if (0 > rv) {
-        LOGD(("read\n"));
+        //LOGD(("read\n"));
         goto out;
     }
     if (rv != sizeof(ehdr)) {
-        LOGD(("elf error 1\n"));
+        //LOGD(("elf error 1\n"));
         goto out;
     }
     if (strncmp((const char *) ELFMAG, (const char *) ehdr.e_ident, SELFMAG)) { /* sanity */
-        LOGD(("not an elf\n"));
+        //LOGD(("not an elf\n"));
         goto out;
     }
     if (sizeof(Elf32_Shdr) != ehdr.e_shentsize) { /* sanity */
-        LOGD(("elf error 2\n"));
+        //LOGD(("elf error 2\n"));
         goto out;
     }
 
@@ -126,11 +126,11 @@ static int do_load(int fd, symtab_t symtab) {
     shdr = (Elf32_Shdr *) xmalloc(size);
     rv = my_pread(fd, shdr, size, ehdr.e_shoff);
     if (0 > rv) {
-        LOGD(("read\n"));
+        //LOGD(("read\n"));
         goto out;
     }
     if (rv != size) {
-        LOGD(("elf error 3 %d %d\n"), rv, size);
+        //LOGD(("elf error 3 %d %d\n"), rv, size);
         goto out;
     }
 
@@ -139,11 +139,11 @@ static int do_load(int fd, symtab_t symtab) {
     shstrtab = (char *) xmalloc(size);
     rv = my_pread(fd, shstrtab, size, shdr[ehdr.e_shstrndx].sh_offset);
     if (0 > rv) {
-        LOGD(("read\n"));
+        //LOGD(("read\n"));
         goto out;
     }
     if (rv != size) {
-        LOGD(("elf error 4 %d %d\n"), rv, size);
+        //LOGD(("elf error 4 %d %d\n"), rv, size);
         goto out;
     }
 
@@ -153,42 +153,42 @@ static int do_load(int fd, symtab_t symtab) {
     for (i = 0, p = shdr; i < ehdr.e_shnum; i++, p++)
         if (SHT_SYMTAB == p->sh_type) {
             if (symh) {
-                LOGD(("too many symbol tables\n"));
+                //LOGD(("too many symbol tables\n"));
                 goto out;
             }
             symh = p;
         } else if (SHT_DYNSYM == p->sh_type) {
             if (dynsymh) {
-                LOGD(("too many symbol tables\n"));
+                //LOGD(("too many symbol tables\n"));
                 goto out;
             }
             dynsymh = p;
         } else if (SHT_STRTAB == p->sh_type
                    && !strncmp(shstrtab + p->sh_name, (".strtab"), 7)) {
             if (strh) {
-                LOGD(("too many string tables\n"));
+                //LOGD(("too many string tables\n"));
                 goto out;
             }
             strh = p;
         } else if (SHT_STRTAB == p->sh_type
                    && !strncmp(shstrtab + p->sh_name, (".dynstr"), 7)) {
             if (dynstrh) {
-                LOGD(("too many string tables\n"));
+                //LOGD(("too many string tables\n"));
                 goto out;
             }
             dynstrh = p;
         }
     /* sanity checks */
     if ((!dynsymh && dynstrh) || (dynsymh && !dynstrh)) {
-        LOGD(("bad dynamic symbol table\n"));
+        //LOGD(("bad dynamic symbol table\n"));
         goto out;
     }
     if ((!symh && strh) || (symh && !strh)) {
-        LOGD(("bad symbol table\n"));
+        //LOGD(("bad symbol table\n"));
         goto out;
     }
     if (!dynsymh && !symh) {
-        LOGD(("no symbol table\n"));
+        //LOGD(("no symbol table\n"));
         goto out;
     }
 
@@ -355,7 +355,7 @@ static int lookup2(struct symlist *sl, unsigned char type, char *name,
 
     len = strlen(name);
     for (i = 0, p = sl->sym; i < sl->num; i++, p++) {
-        //LOGD("name: %s %x\n", sl->str+p->st_name, p->st_value)
+        ////LOGD("name: %s %x\n", sl->str+p->st_name, p->st_value)
         if (!strncmp(sl->str + p->st_name, name, len)
             && *(sl->str + p->st_name + len) == 0
             && ELF32_ST_TYPE(p->st_info) == type) {
@@ -390,23 +390,23 @@ int find_name(pid_t pid, const char *name, const char *libn,
     symtab_t s;
 
     if (0 > load_memmap(pid, mm, &nmm)) {
-        LOGD(("cannot read memory map\n"));
+        //LOGD(("cannot read memory map\n"));
         return -1;
     }
     if (0
         > find_libname((char *) libn, (char *) libc, sizeof(libc),
                        &libcaddr, mm, nmm)) {
-        LOGD(("cannot find lib: %s\n"), libn);
+        //LOGD(("cannot find lib: %s\n"), libn);
         return -1;
     }
-    //LOGD("lib: >%s<\n", libc)
+    ////LOGD("lib: >%s<\n", libc)
     s = load_symtab(libc);
     if (!s) {
-        LOGD(("cannot read symbol table\n"));
+        //LOGD(("cannot read symbol table\n"));
         return -1;
     }
     if (0 > lookup_func_sym(s, (char *) name, addr)) {
-        LOGD(("cannot find function: %s\n"), name);
+        //LOGD(("cannot find function: %s\n"), name);
         return -1;
     }
     *addr += libcaddr;
@@ -421,11 +421,11 @@ int find_libbase(pid_t pid, const char *libn, unsigned long *addr) {
     symtab_t s;
 
     if (0 > load_memmap(pid, mm, &nmm)) {
-        LOGD(("cannot read memory map\n"));
+        //LOGD(("cannot read memory map\n"));
         return -1;
     }
     if (0 > find_libname(libn, libc, sizeof(libc), &libcaddr, mm, nmm)) {
-        LOGD(("cannot find lib\n"));
+        //LOGD(("cannot find lib\n"));
         return -1;
     }
     *addr = libcaddr;
