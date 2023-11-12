@@ -65,34 +65,21 @@ EGLBoolean hook_eglSwapBuffers(EGLDisplay dpy, EGLSurface surface) {
     }
 
     ImGuiIO &io = ImGui::GetIO();
-
+ImGui::CreateContext();
+	ImGuiStyle& style = ImGui::GetStyle();
+	//style.Colors[ImGuiCol_WindowBg] = ImColor(1.0f, 0.84f, 0.0f, 1.0f);
+    style.Colors[ImGuiCol_Button] = ImVec4(0.0f, 1.0f, 0.0f, 1.0f); // Green background color
+    style.Colors[ImGuiCol_BorderShadow] = ImVec4(0.0f, 0.0f, 1.0f, 10.0f);
+	//style.Colors[ImGuiCol_WindowBg] = ImVec4(15, 255, 253, 255);
+	// Blue border color
+	style.Colors[ImGuiCol_TitleBg] = ImVec4(1.0f, 0.843f, 0.0f, 1.0f); // Golden color
+    ImGuiIO &io = ImGui::GetIO();
+	io.Fonts -> AddFontFromFileTTF("Rubik-Regular.ttf",22.0f);
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplAndroid_NewFrame(g_GlWidth, g_GlHeight);
     ImGui::NewFrame();
 
-    ImGui::Text("aman");
-    ImGui::Checkbox("Default Chams",&DefaultChams);
-	//	 ImGui::SameLine();
-		 ImGui::Text("");
-	//	 ImGui::SameLine();
-		 ImGui::Checkbox("Shading Chams",&ShadingChams);
-	//	 ImGui::SameLine();
-		 ImGui::Text("");
-    //ImGui::SameLine();
-		 ImGui::Checkbox("Wireframe Chams",&WireframeChams);
-		 ImGui::Text("");
-		 ImGui::Text("");
-	//	 ImGui::SameLine();
-		 ImGui::Checkbox("Glow Chams    ",&GlowChams);
-	//	 ImGui::SameLine();
-		 ImGui::Text("");
-	//	 ImGui::SameLine();
-		 ImGui::Checkbox("Outline Chams ",&OutlineChams);
-	//	 ImGui::SameLine();
-		 ImGui::Text("");
-	//	 ImGui::SameLine();
-		 ImGui::Checkbox("Rainbow Chams",&RainbowChams);
-		 ImGui::Text("");
+    
 		 
     ImGui::EndFrame();
     ImGui::Render();
