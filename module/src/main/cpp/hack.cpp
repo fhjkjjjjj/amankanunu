@@ -28,7 +28,7 @@ static int                  g_GlHeight, g_GlWidth;
 static bool                 g_IsSetup = false;
 static std::string          g_IniFileName = "";
 static utils::module_info   g_TargetModule{};
-
+int glHeight, glWidth;
 HOOKAF(void, Input, void *thiz, void *ex_ab, void *ex_ac) {
     origInput(thiz, ex_ab, ex_ac);
     ImGui_ImplAndroid_HandleInputEvent((AInputEvent *)thiz);
