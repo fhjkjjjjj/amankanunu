@@ -37,20 +37,15 @@ HOOKAF(void, Input, void *thiz, void *ex_ab, void *ex_ac) {
 
 void SetupImGui() {
     IMGUI_CHECKVERSION();
+
     ImGui::CreateContext();
-    ImGuiIO &io = ImGui::GetIO();
+    ImGuiIO& io = ImGui::GetIO();
 
-    io.IniFilename = g_IniFileName.c_str();
-    io.DisplaySize = ImVec2((float)g_GlWidth, (float)g_GlHeight);
-
-    ImGui_ImplAndroid_Init(nullptr);
-    ImGui_ImplOpenGL3_Init("#version 300 es");
-    ImGui::StyleColorsLight();
-
+    io.DisplaySize = ImVec2((float)glWidth, (float)glHeight);
+    ImGui_ImplOpenGL3_Init("#version 100");
     ImFontConfig font_cfg;
     font_cfg.SizePixels = 22.0f;
     io.Fonts->AddFontDefault(&font_cfg);
-
     ImGui::GetStyle().ScaleAllSizes(3.0f);
 }
 
