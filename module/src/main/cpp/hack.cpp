@@ -77,7 +77,140 @@ ImGui::CreateContext();
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplAndroid_NewFrame(g_GlWidth, g_GlHeight);
     ImGui::NewFrame();
-
+static ImVec4 bgColor = ImVec4(1.0f, 0.84f, 0.0f, 1.0f); // Initial background color (white)
+	ImGui::GetStyle().Colors[ImGuiCol_WindowBg] = ImVec4(bgColor.x, bgColor.y, bgColor.z, bgColor.w);
+	static ImVec4 textColor = ImVec4(0.0f, 0.0f, 0.0f, 1.0f); // Initial text color (white)
+	ImGui::GetStyle().Colors[ImGuiCol_Text] = ImVec4(textColor.x, textColor.y, textColor.z, textColor.w);
+	//static ImVec4 BorderShadow = ImVec4(0.0f, 0.0f, 0.0f, 1.0f); // Initial text color (white)
+	//ImGui::GetStyle().Colors[ImGuiCol_BorderShadow] = ImVec4(BorderShadow.x, BorderShadow.y, BorderShadow.z, BorderShadow.w);
+	ImGui::Begin("prey day Survival Mod menu By Aman");
+	float H = 750.0f;
+    float W = 750.0f;
+	ImGui::SetWindowSize(ImVec2(H, W));
+	static bool isLogin = false; //main login
+	if (!isLogin){
+    static std::string err;
+	//ImGui::Text("");
+	ImGui::Text(" ");
+	ImGui::SameLine();
+    ImGui::Text("Please Login! (Enter Key) (For New Key Check My Youtube Channel");
+	style.FrameRounding = 35.0f;
+	ImGui::PushItemWidth(-1);
+	static char s[64] ="";
+	ImGui::InputText("##key", s, sizeof s);
+	//i want to addd here 
+	/*
+	ImGui::PopItemWidth();
+	ImGui::PushItemWidth(-1);
+	if (ImGui::Button("A")){
+		strcat(s, "a");
+	}
+	ImGui::PopItemWidth();
+	ImGui::PushItemWidth(-1);
+	ImGui::SameLine();
+	if (ImGui::Button("B")){
+		strcat(s, "b");
+	}*/
+	ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(35,35));
+	ImGui::Text("");
+	ImGui::Text("");
+	ImGui::SameLine();
+	ImGui::Text("");
+	ImGui::SameLine();
+	ImGui::Text("");
+	ImGui::SameLine();
+	ImGui::Text("     ");
+	ImGui::SameLine();
+	if (ImGui::Button("1")){
+		strcat(s, "1");
+	}
+	ImGui::SameLine();
+	ImGui::Text("");
+	ImGui::SameLine();
+	if (ImGui::Button("2")){
+		strcat(s, "2");
+	}
+	ImGui::SameLine();
+	ImGui::Text("");
+	ImGui::SameLine();
+	if (ImGui::Button("3")){
+		strcat(s, "3");
+	}
+	ImGui::SameLine();
+	ImGui::Text("");
+	ImGui::SameLine();
+	if (ImGui::Button("0")){
+		strcat(s, "0");
+		}/*
+	ImGui::SameLine();
+	ImGui::Text("");
+	ImGui::SameLine();
+	if (ImGui::Button("5")){
+		strcat(s, "5");
+		}*/
+	ImGui::Text("");
+	ImGui::Text("");
+	ImGui::SameLine();
+	ImGui::Text("");
+	ImGui::SameLine();
+	ImGui::Text("");
+	ImGui::SameLine();
+	ImGui::Text("     ");
+	ImGui::SameLine();
+	if (ImGui::Button("4")){
+		strcat(s, "4");
+	}
+	ImGui::SameLine();
+	ImGui::Text("");
+	ImGui::SameLine();
+	if (ImGui::Button("5")){
+		strcat(s, "5");
+	}
+	ImGui::SameLine();
+	ImGui::Text("");
+	ImGui::SameLine();
+	if (ImGui::Button("6")){
+		strcat(s, "6");
+		//strncpy(s, "", sizeof s);
+	}
+	ImGui::SameLine();
+	ImGui::Text("");
+	ImGui::SameLine();
+	if (ImGui::Button("clear")){
+		//strcat(s, "6");
+		strncpy(s, "", sizeof s);
+	}
+	/*
+	ImGui::SameLine();
+	ImGui::Text("");
+	ImGui::SameLine();
+	if (ImGui::Button("9")){
+		strcat(s, "9");
+		}
+	ImGui::SameLine();
+	ImGui::Text("");
+	ImGui::SameLine();
+	if (ImGui::Button("10")){
+		strcat(s, "10");
+		}*/
+	ImGui::Text("");
+	ImGui::PopItemWidth();
+			ImGui::PushItemWidth(-1);
+			if (ImGui::Button("Login", ImVec2(ImGui::GetContentRegionAvailWidth(), 0))) {
+				err = "ok"
+				
+		//		err = "OK";
+				if (err == "OK") {
+					isLogin = true;/*bValid && g_Auth == g_Token*/
+				}
+			}
+			
+			ImGui::PopItemWidth();
+			if (!err.empty() && err != "OK") {
+				ImGui::Text("Error: %s", err.c_str());
+			}
+			ImGui::PopItemWidth();
+			}
     
 		 
     ImGui::EndFrame();
