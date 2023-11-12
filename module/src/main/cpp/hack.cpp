@@ -73,7 +73,6 @@ ImGui::CreateContext();
 	//style.Colors[ImGuiCol_WindowBg] = ImVec4(15, 255, 253, 255);
 	// Blue border color
 	style.Colors[ImGuiCol_TitleBg] = ImVec4(1.0f, 0.843f, 0.0f, 1.0f); // Golden color
-    ImGuiIO &io = ImGui::GetIO();
 	io.Fonts -> AddFontFromFileTTF("Rubik-Regular.ttf",22.0f);
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplAndroid_NewFrame(g_GlWidth, g_GlHeight);
