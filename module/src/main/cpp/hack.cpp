@@ -197,7 +197,7 @@ static ImVec4 bgColor = ImVec4(1.0f, 0.84f, 0.0f, 1.0f); // Initial background c
 	ImGui::PopItemWidth();
 			ImGui::PushItemWidth(-1);
 			if (ImGui::Button("Login", ImVec2(ImGui::GetContentRegionAvailWidth(), 0))) {
-				err = "ok"
+				err = "ok";
 				
 		//		err = "OK";
 				if (err == "OK") {
