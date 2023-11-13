@@ -9,6 +9,21 @@ endif ()
 message("Build type: ${CMAKE_BUILD_TYPE}")
 
 set(CMAKE_CXX_STANDARD 20)
+# Assuming you have already defined your target
+# Add the following lines to include the libcurl static library
+
+# Set the path to libcurl.a
+set(LIBCURL_PATH ${CMAKE_CURRENT_SOURCE_DIR}/curl/curl-android-${ANDROID_ABI}/lib/libcurl.a)
+
+# Add libcurl as a static library
+add_library(libcurl STATIC IMPORTED)
+set_target_properties(libcurl PROPERTIES IMPORTED_LOCATION ${LIBCURL_PATH})
+
+# Include libcurl in the target
+target_include_directories(your_target PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/curl/openssl-android-${ANDROID_ABI}/include)
+
+# Link your target with libcurl
+target_link_libraries(your_target PRIVATE libcurl)
 
 set(LINKER_FLAGS "-ffixed-x18 -Wl,--hash-style=both")
 set(C_FLAGS "-Werror=format -fdata-sections -ffunction-sections")
