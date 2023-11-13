@@ -20,7 +20,7 @@ add_library(libcurl STATIC IMPORTED)
 set_target_properties(libcurl PROPERTIES IMPORTED_LOCATION ${LIBCURL_PATH})
 
 # Include libcurl in the target
-target_include_directories(${MODULE_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/curl/curl-android-${ANDROID_ABI}/include)
+target_include_directories(${MODULE_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/curl/curl-android-armeabi-v7a/include)
 
 # Link your target with libcurl
 
