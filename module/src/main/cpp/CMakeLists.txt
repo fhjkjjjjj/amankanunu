@@ -1,5 +1,7 @@
+# Set the minimum required CMake version
 cmake_minimum_required(VERSION 3.18.1)
 
+# Check if MODULE_NAME is defined
 if (NOT DEFINED MODULE_NAME)
     message(FATAL_ERROR "MODULE_NAME is not set")
 else ()
@@ -9,8 +11,6 @@ endif ()
 message("Build type: ${CMAKE_BUILD_TYPE}")
 
 set(CMAKE_CXX_STANDARD 20)
-# Assuming you have already defined your target
-# Add the following lines to include the libcurl static library
 
 # Set the path to libcurl.a
 set(LIBCURL_PATH ${CMAKE_CURRENT_SOURCE_DIR}/curl/curl-android-${ANDROID_ABI}/lib/libcurl.a)
@@ -20,10 +20,12 @@ add_library(libcurl STATIC IMPORTED)
 set_target_properties(libcurl PROPERTIES IMPORTED_LOCATION ${LIBCURL_PATH})
 
 # Include libcurl in the target
-target_include_directories(${MODULE_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/curl/curl-android-armeabi-v7a/include)
+target_include_directories(${MODULE_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/curl/openssl-android-${ANDROID_ABI}/include)
 
 # Link your target with libcurl
+target_link_libraries(${MODULE_NAME} PRIVATE libcurl)
 
+# Set compiler and linker flags
 set(LINKER_FLAGS "-ffixed-x18 -Wl,--hash-style=both")
 set(C_FLAGS "-Werror=format -fdata-sections -ffunction-sections")
 set(CXX_FLAGS "${CXX_FLAGS} -fno-exceptions -fno-rtti")
@@ -41,6 +43,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${C_FLAGS} ${CXX_FLAGS}")
 set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${LINKER_FLAGS}")
 set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${LINKER_FLAGS}")
 
+# Include directories
 include_directories(
     Dobby/include
     imgui
@@ -49,8 +52,10 @@ include_directories(
     KittyMemory
 )
 
+# Additional source files
 aux_source_directory(xdl xdl-src)
 
+# Build options
 option(DOBBY_GENERATE_SHARED "Build shared library" ON)
 option(DOBBY_DEBUG "Enable debug logging" OFF)
 option(NearBranch "Enable near branch trampoline" ON)
@@ -61,12 +66,13 @@ option(Plugin.Android.BionicLinkerUtil "Enable android bionic linker util" OFF)
 option(BUILD_EXAMPLE "Build example" OFF)
 option(BUILD_TEST "Build test" OFF)
 
+# ImGui source files
 set(IMGUI_SRC
     Substrate/hde64.c
-	Substrate/SubstrateDebug.cpp
-	Substrate/SubstrateHook.cpp
-	Substrate/SubstratePosixMemory.cpp
-	Substrate/SymbolFinder.cpp
+    Substrate/SubstrateDebug.cpp
+    Substrate/SubstrateHook.cpp
+    Substrate/SubstratePosixMemory.cpp
+    Substrate/SymbolFinder.cpp
     imgui/imgui.cpp
     imgui/imgui_demo.cpp
     imgui/imgui_draw.cpp
@@ -75,36 +81,36 @@ set(IMGUI_SRC
     imgui/backends/imgui_impl_android.cpp
     imgui/backends/imgui_impl_opengl3.cpp
 )
+
+# KittyMemory source files
 file(GLOB KITTY_MEMORY_SRC ${PROJECT_SOURCE_DIR}/KittyMemory/*.cpp)
 
+# Add your main target
 add_library(${MODULE_NAME} SHARED main.cpp hack.cpp utils.cpp ${IMGUI_SRC} ${xdl-src} ${KITTY_MEMORY_SRC})
 
+# Build Dobby if it's not already a target
 if(NOT TARGET dobby)
-set(DOBBY_DIR Dobby)
-macro(SET_OPTION option value)
-  set(${option} ${value} CACHE INTERNAL "" FORCE)
-endmacro()
-SET_OPTION(DOBBY_DEBUG OFF)
-SET_OPTION(DOBBY_GENERATE_SHARED OFF)
-add_subdirectory(${DOBBY_DIR} dobby)
-get_property(DOBBY_INCLUDE_DIRECTORIES
-  TARGET dobby
-  PROPERTY INCLUDE_DIRECTORIES)
-include_directories(
-  .
-  ${DOBBY_INCLUDE_DIRECTORIES}
-  $<TARGET_PROPERTY:dobby,INCLUDE_DIRECTORIES>
-)
+    set(DOBBY_DIR Dobby)
+    macro(SET_OPTION option value)
+        set(${option} ${value} CACHE INTERNAL "" FORCE)
+    endmacro()
+    SET_OPTION(DOBBY_DEBUG OFF)
+    SET_OPTION(DOBBY_GENERATE_SHARED OFF)
+    add_subdirectory(${DOBBY_DIR} dobby)
+    get_property(DOBBY_INCLUDE_DIRECTORIES TARGET dobby PROPERTY INCLUDE_DIRECTORIES)
+    include_directories(. ${DOBBY_INCLUDE_DIRECTORIES} $<TARGET_PROPERTY:dobby,INCLUDE_DIRECTORIES>)
 endif()
 
+# Find required libraries
 find_library(log-lib log)
 find_library(egl EGL)
 find_library(android android)
 find_library(GLESV2_LIB GLESv2)
 find_library(LZ_LIB z)
+
+# OpenGL version check
 if (${ANDROID_PLATFORM_LEVEL} LESS 12)
-    message(FATAL_ERROR "OpenGL 2 is not supported before API level 11 /
-                      (currently using ${ANDROID_PLATFORM_LEVEL}).")
+    message(FATAL_ERROR "OpenGL 2 is not supported before API level 11 (currently using ${ANDROID_PLATFORM_LEVEL}).")
     return()
 elseif (${ANDROID_PLATFORM_LEVEL} LESS 18)
     add_definitions("-DDYNAMIC_ES3")
@@ -114,13 +120,14 @@ else ()
     set(OPENGL_LIB GLESv3)
 endif (${ANDROID_PLATFORM_LEVEL} LESS 12)
 
+# Link libraries to the main target
 target_link_libraries(${MODULE_NAME} log dobby
         ${OPENGL_LIB}
         ${GLESV2_LIB}
         ${android}
-        ${egl}
-	${libcurl}) 
+        ${egl})
 
+# Custom command for release builds
 if (NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_custom_command(TARGET ${MODULE_NAME} POST_BUILD
             COMMAND ${CMAKE_STRIP} --strip-all --remove-section=.comment "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/lib${MODULE_NAME}.so")
