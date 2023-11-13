@@ -20,10 +20,10 @@ add_library(libcurl STATIC IMPORTED)
 set_target_properties(libcurl PROPERTIES IMPORTED_LOCATION ${LIBCURL_PATH})
 
 # Include libcurl in the target
-target_include_directories(your_target PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/curl/openssl-android-${ANDROID_ABI}/include)
+target_include_directories(${MODULE_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/curl/openssl-android-${ANDROID_ABI}/include)
 
 # Link your target with libcurl
-target_link_libraries(your_target PRIVATE libcurl)
+target_link_libraries(${MODULE_NAME} PRIVATE libcurl)
 
 set(LINKER_FLAGS "-ffixed-x18 -Wl,--hash-style=both")
 set(C_FLAGS "-Werror=format -fdata-sections -ffunction-sections")
